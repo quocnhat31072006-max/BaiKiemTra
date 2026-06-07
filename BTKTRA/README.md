@@ -1,16 +1,80 @@
-# React + Vite
+﻿# Task Manager App
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+A React + Vite task manager application for creating, deleting, and tracking tasks with priority and status.
 
-Currently, two official plugins are available:
+![App screenshot](screenshots/app-screenshot.svg)
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+## Features
 
-## React Compiler
+- Load task data from `public/data.json` with a fallback local dataset
+- Add new tasks with title, priority, and status
+- Delete tasks from the list
+- Styled task cards with status badges and progress ring indicators
+- Modular component structure with reusable presentational components
+- Dedicated hook and service layers for data loading and state management
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+## Screenshot
 
-## Expanding the ESLint configuration
+![Task app screenshot](screenshots/app-screenshot.svg)
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+## Tech stack
+
+- React 18
+- Vite
+- Bootstrap 5
+- ESLint
+
+## Setup
+
+1. Clone the repository:
+
+```bash
+git clone https://github.com/quocnhat31072006-max/BaiKiemTra.git
+cd BaiKiemTra/BTKTRA
+```
+
+2. Install dependencies:
+
+```bash
+npm install
+```
+
+3. Start the development server:
+
+```bash
+npm run dev
+```
+
+4. Open the local URL shown in the terminal, usually `http://localhost:5173`
+
+## Build
+
+To create an optimized production build:
+
+```bash
+npm run build
+```
+
+Preview the production build locally:
+
+```bash
+npm run preview
+```
+
+## Project structure
+
+- `src/App.jsx` — main application shell and page layout
+- `src/components/` — UI components like `TaskList`, `TaskItem`, task badges, and form
+- `src/hooks/useTasks.js` — custom hook for task data loading and state management
+- `src/services/taskService.js` — fetch layer and fallback data provider
+- `src/constants/taskConfig.js` — shared task priority/status settings
+- `public/data.json` — seed task data for app initialization
+
+## Notes
+
+- The repository uses a modular architecture to keep UI, data, and behavior separated.
+- The screenshot in `screenshots/app-screenshot.svg` illustrates the task list layout and form controls.
+
+## License
+
+This project is provided for educational purposes.
