@@ -1,43 +1,14 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import "./App.css";
 
 import TaskList from "./components/TaskList";
-import TodoForm from "./components/TodoForm";
+import TaskForm from "./components/TodoForm";
+import TaskStatistics from "./components/TaskStatistics";
+import { useTasks } from "./hooks/useTasks";
 
 function App() {
-  const [tasks, setTasks] = useState([]);
-  const [loading, setLoading] = useState(true);
-  const [fetchError, setFetchError] = useState("");
   const [showForm, setShowForm] = useState(false);
-
-  useEffect(() => {
-    const loadTasks = async () => {
-      try {
-        const response = await fetch("/data.json");
-        if (!response.ok) {
-          throw new Error("Không thể tải dữ liệu tasks.");
-        }
-
-        const data = await response.json();
-        setTasks(data);
-      } catch (error) {
-        setFetchError(error.message || "Lỗi khi tải dữ liệu.");
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    loadTasks();
-  }, []);
-
-  const addTask = (newTask) => {
-    setTasks((prevTasks) => [...prevTasks, newTask]);
-    setShowForm(false);
-  };
-
-  const deleteTask = (taskId) => {
-    setTasks((prevTasks) => prevTasks.filter((task) => task.id !== taskId));
-  };
+  const { tasks, loading, error, addTask, deleteTask } = useTasks();
 
   return (
     <div className="container py-5">
@@ -60,7 +31,11 @@ function App() {
         </div>
       </div>
 
-      {fetchError && <div className="alert alert-danger">{fetchError}</div>}
+      {error && (
+        <div className="alert alert-warning">
+          {error} - dữ liệu dự phòng đã được tải.
+        </div>
+      )}
 
       {loading ? (
         <div className="text-center py-5 text-muted">
@@ -68,6 +43,8 @@ function App() {
         </div>
       ) : (
         <>
+          <TaskStatistics tasks={tasks} />
+
           <div className="task-list-card card border-0 rounded-4 shadow-sm p-3 mb-4">
             <TaskList tasks={tasks} onDeleteTask={deleteTask} />
           </div>
@@ -78,7 +55,7 @@ function App() {
                 className="modal-backdrop"
                 onClick={() => setShowForm(false)}
               />
-              <TodoForm
+              <TaskForm
                 addTask={addTask}
                 closeForm={() => setShowForm(false)}
               />

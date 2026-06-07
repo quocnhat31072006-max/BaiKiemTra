@@ -1,20 +1,21 @@
 import { useState } from "react";
+import {
+  DEFAULT_STATUS,
+  TASK_PRIORITIES,
+  TASK_STATUSES,
+} from "../constants/taskConfig";
 
-const priorities = [
-  { label: "High", variant: "outline-danger" },
-  { label: "Medium", variant: "outline-warning" },
-  { label: "Low", variant: "outline-success" },
-];
-
-function TodoForm({ addTask, closeForm }) {
+function TaskForm({ addTask, closeForm }) {
   const [task, setTask] = useState("");
   const [priority, setPriority] = useState("Low");
+  const [status, setStatus] = useState(DEFAULT_STATUS);
   const [error, setError] = useState("");
 
   const handleSubmit = (e) => {
     e.preventDefault();
 
     const trimmedTask = task.trim();
+
     if (trimmedTask === "") {
       setError("Tên Task không được để trống");
       return;
@@ -26,20 +27,22 @@ function TodoForm({ addTask, closeForm }) {
     }
 
     addTask({
-      id: Date.now(),
+      id: crypto.randomUUID ? crypto.randomUUID() : Date.now().toString(),
       task: trimmedTask,
       priority,
-      status: "To Do",
-      completed: false,
+      status,
+      completed: status === "Done",
     });
 
     setTask("");
     setPriority("Low");
+    setStatus(DEFAULT_STATUS);
     setError("");
+    closeForm();
   };
 
   return (
-    <div className="todo-popup">
+    <div className="todo-popup" onClick={closeForm}>
       <div
         className="card form-card shadow-sm"
         onClick={(e) => e.stopPropagation()}
@@ -50,6 +53,7 @@ function TodoForm({ addTask, closeForm }) {
             type="button"
             className="btn btn-outline-secondary btn-sm"
             onClick={closeForm}
+            aria-label="Close dialog"
           >
             ✕
           </button>
@@ -58,8 +62,11 @@ function TodoForm({ addTask, closeForm }) {
         <div className="card-body">
           <form onSubmit={handleSubmit}>
             <div className="mb-3">
-              <label className="form-label">Task</label>
+              <label htmlFor="task-input" className="form-label">
+                Task
+              </label>
               <input
+                id="task-input"
                 type="text"
                 className="form-control"
                 placeholder="Type your task here..."
@@ -79,12 +86,36 @@ function TodoForm({ addTask, closeForm }) {
                 role="group"
                 aria-label="Priority"
               >
-                {priorities.map((item) => (
+                {TASK_PRIORITIES.map((item) => (
                   <button
-                    key={item.label}
+                    key={item.value}
                     type="button"
-                    className={`btn btn-${item.variant} ${priority === item.label ? "active" : ""}`}
-                    onClick={() => setPriority(item.label)}
+                    className={`btn btn-outline-${item.variant} ${
+                      priority === item.value ? "active" : ""
+                    }`}
+                    onClick={() => setPriority(item.value)}
+                  >
+                    {item.label}
+                  </button>
+                ))}
+              </div>
+            </div>
+
+            <div className="mb-4">
+              <label className="form-label d-block">Status</label>
+              <div
+                className="priority-buttons btn-group"
+                role="group"
+                aria-label="Task status"
+              >
+                {TASK_STATUSES.map((item) => (
+                  <button
+                    key={item.value}
+                    type="button"
+                    className={`btn btn-outline-${item.badgeClass} ${
+                      status === item.value ? "active" : ""
+                    }`}
+                    onClick={() => setStatus(item.value)}
                   >
                     {item.label}
                   </button>
@@ -102,4 +133,4 @@ function TodoForm({ addTask, closeForm }) {
   );
 }
 
-export default TodoForm;
+export default TaskForm;

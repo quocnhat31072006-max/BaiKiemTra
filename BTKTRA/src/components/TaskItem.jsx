@@ -1,27 +1,11 @@
 import PriorityBadge from "./PriorityBadge";
+import StatusBadge from "./StatusBadge";
+import { TASK_STATUSES } from "../constants/taskConfig";
 
 function TaskItem({ task, onDelete }) {
-  const getStatusClass = (status) => {
-    switch (status) {
-      case "Done":
-        return "badge bg-success bg-opacity-10 text-success";
-      case "In Progress":
-        return "badge bg-warning bg-opacity-10 text-warning";
-      default:
-        return "badge bg-secondary bg-opacity-10 text-secondary";
-    }
-  };
-
-  const getRingClass = (status) => {
-    switch (status) {
-      case "Done":
-        return "ring-done";
-      case "In Progress":
-        return "ring-progress";
-      default:
-        return "ring-todo";
-    }
-  };
+  const statusConfig =
+    TASK_STATUSES.find((item) => item.value === task.status) ??
+    TASK_STATUSES[0];
 
   return (
     <div className="card task-item-card mb-3 border-0 shadow-sm">
@@ -42,12 +26,12 @@ function TaskItem({ task, onDelete }) {
           <div className="col-md-2">
             <small className="text-muted">Status</small>
             <div className="mt-1">
-              <span className={getStatusClass(task.status)}>{task.status}</span>
+              <StatusBadge status={task.status} />
             </div>
           </div>
 
           <div className="col-md-2 d-flex justify-content-center">
-            <div className={`task-progress-ring ${getRingClass(task.status)}`}>
+            <div className={`task-progress-ring ${statusConfig.ringClass}`}>
               {task.status === "Done" && <span className="ring-icon">✓</span>}
             </div>
           </div>
@@ -57,6 +41,7 @@ function TaskItem({ task, onDelete }) {
               type="button"
               className="btn btn-outline-secondary btn-sm me-2"
               onClick={() => alert("Chức năng sửa đang phát triển")}
+              aria-label="Edit task"
             >
               ✏️
             </button>
@@ -64,6 +49,7 @@ function TaskItem({ task, onDelete }) {
               type="button"
               className="btn btn-outline-danger btn-sm"
               onClick={() => onDelete(task.id)}
+              aria-label="Delete task"
             >
               🗑️
             </button>
