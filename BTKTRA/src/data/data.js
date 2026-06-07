@@ -1,0 +1,37 @@
+export default [
+  {
+    id: 1,
+    task: "Go to gym",
+    priority: "High",
+    status: "To Do",
+    completed: false,
+  },
+  {
+    id: 2,
+    task: "Read a book",
+    priority: "Low",
+    status: "Done",
+    completed: true,
+  },
+  {
+    id: 3,
+    task: "Go to market",
+    priority: "Medium",
+    status: "In Progress",
+    completed: false,
+  },
+  {
+    id: 4,
+    task: "Learn React",
+    priority: "High",
+    status: "To Do",
+    completed: false,
+  },
+  {
+    id: 5,
+    task: "Do homework",
+    priority: "Medium",
+    status: "Done",
+    completed: true,
+  },
+];
